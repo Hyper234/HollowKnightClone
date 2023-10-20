@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInput playerInput;
     private PlayerInputActions playerInputActions;
     private BoxCollider2D boxCollider2D;
+    private Animator animator;
 
     private float horizontalInput;
 
@@ -25,22 +26,29 @@ public class PlayerMovement : MonoBehaviour
         rigidBody2D = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
         boxCollider2D = GetComponent<BoxCollider2D>();
+        animator = GetComponent<Animator>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
         playerInputActions.Player.Jump.performed += Jump_performed;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         Move();
         FlipSprite();
+
+        animator.SetBool("running", horizontalInput != 0);
+        animator.SetBool("grounded", IsGrounded());
     }
 
     private void Jump_performed(InputAction.CallbackContext obj)
     {
-        if(IsGrounded())
+        if (IsGrounded())
+        {
             rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
+            animator.SetTrigger("jump");
+        }
     }
 
     private void Move()

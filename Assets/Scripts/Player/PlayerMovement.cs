@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
 
     private float horizontalInput;
+    private bool jumpIsPressed = true;
 
     private void Awake()
     {
@@ -44,10 +45,20 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump_performed(InputAction.CallbackContext obj)
     {
-        if (IsGrounded())
+        if (IsGrounded() && jumpIsPressed)
         {
             rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
             animator.SetTrigger("jump");
+            jumpIsPressed = !jumpIsPressed;
+        }
+        else if (IsGrounded())
+        {
+            jumpIsPressed = !jumpIsPressed;
+        }
+        else
+        {
+            rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, Math.Min(0, rigidBody2D.velocity.y));
+            jumpIsPressed = !jumpIsPressed;
         }
     }
 

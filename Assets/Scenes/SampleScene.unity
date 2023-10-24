@@ -229,9 +229,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 906598832}
-  smoothSpeed: 0.1
+  smoothSpeed: 0.25
   cameraOffset: {x: 0, y: 2, z: -10}
-  cameraDistance: 2
+  cameraDistance: 0.6
 --- !u!1 &906598828
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,7 +464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21a3cf8c3ddc8954f9d951345fd90d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
+  movementSpeed: 4.5
   jumpPower: 12
   platformLayerMask:
     serializedVersion: 2

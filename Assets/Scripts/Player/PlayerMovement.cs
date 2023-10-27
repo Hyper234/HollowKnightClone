@@ -45,21 +45,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump_performed(InputAction.CallbackContext obj)
     {
-        if (IsGrounded() && jumpIsPressed)
+        if (IsGrounded())
         {
-            rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
-            animator.SetTrigger("jump");
-            jumpIsPressed = !jumpIsPressed;
-        }
-        else if (IsGrounded())
-        {
-            jumpIsPressed = !jumpIsPressed;
+            if (jumpIsPressed)
+            {
+                rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
+                animator.SetTrigger("jump");
+            }
         }
         else
         {
-            rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, Math.Min(0, rigidBody2D.velocity.y));
-            jumpIsPressed = !jumpIsPressed;
+            if (!jumpIsPressed)
+            {
+                rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, Mathf.Min(0, rigidBody2D.velocity.y));
+            }
         }
+
+        jumpIsPressed = !jumpIsPressed;
     }
 
     private void Move()

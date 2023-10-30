@@ -20,7 +20,8 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
 
     private float horizontalInput;
-    private bool jumpIsPressed = true;
+    private bool jumpHeld = true;
+    private bool doubleJumpAvailable = true;
 
     private void Awake()
     {
@@ -47,21 +48,32 @@ public class PlayerMovement : MonoBehaviour
     {
         if (IsGrounded())
         {
-            if (jumpIsPressed)
+            if (jumpHeld)
             {
                 rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
                 animator.SetTrigger("jump");
             }
+
+            doubleJumpAvailable = true;
         }
         else
         {
-            if (!jumpIsPressed)
+            if (jumpHeld)
+            {
+                if (doubleJumpAvailable)
+                {
+                    rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
+                    animator.SetTrigger("jump");
+                    doubleJumpAvailable = false;
+                }
+            }
+            else
             {
                 rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, Mathf.Min(0, rigidBody2D.velocity.y));
             }
         }
 
-        jumpIsPressed = !jumpIsPressed;
+        jumpHeld = !jumpHeld;
     }
 
     private void Move()

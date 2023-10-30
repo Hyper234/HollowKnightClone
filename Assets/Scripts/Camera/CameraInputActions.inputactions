@@ -1,0 +1,56 @@
+{
+    "name": "CameraInputActions",
+    "maps": [
+        {
+            "name": "Camera",
+            "id": "1ba3bb0b-ca40-447a-93d9-7e09df2a7c41",
+            "actions": [
+                {
+                    "name": "LookUpDown",
+                    "type": "Button",
+                    "id": "15f858cf-6787-4059-bd1a-ccc0f6ce77fd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "Up/Down",
+                    "id": "2b9d75d1-816f-433e-b65f-f728433eadbc",
+                    "path": "1DAxis",
+                    "interactions": "Hold(duration=0.5),Press(behavior=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookUpDown",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "8b31be97-9c92-4b6b-a297-3757cf3322b5",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookUpDown",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "6cfe441b-b629-4ad4-96ca-563b9d642bc2",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookUpDown",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

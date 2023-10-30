@@ -20,24 +20,21 @@ public class CameraControls : MonoBehaviour
         cameraInputActions = new CameraInputActions();
         cameraInputActions.Camera.Enable();
         cameraInputActions.Camera.LookUpDown.performed += LookUpDown_performed;
+        cameraInputActions.Camera.LookUpDown.canceled += LookUpDown_canceled;
     }
 
     private void LookUpDown_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         float input = cameraInputActions.Camera.LookUpDown.ReadValue<float>();
 
-        if (!isLookHeld)
-        {
-            if(input == 1)
-                cameraFollow.cameraControlsOffset += lookUpDistance;
-            else
-                cameraFollow.cameraControlsOffset += -lookDownDistance;
-        }
+        if(input == 1)
+            cameraFollow.cameraControlsOffset += lookUpDistance;
         else
-        {
-            cameraFollow.cameraControlsOffset = 0;
-        }
+            cameraFollow.cameraControlsOffset += -lookDownDistance;
+    }
 
-        isLookHeld = !isLookHeld;
+    private void LookUpDown_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        cameraFollow.cameraControlsOffset = 0;
     }
 }

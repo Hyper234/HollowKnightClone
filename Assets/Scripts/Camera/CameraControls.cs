@@ -11,8 +11,6 @@ public class CameraControls : MonoBehaviour
     private CameraFollow cameraFollow;
     private CameraInputActions cameraInputActions;
 
-    private bool isLookHeld = false;
-
     void Awake()
     {
         cameraFollow = GetComponent<CameraFollow>();

@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     private bool doubleJumpAvailable = true;
     private bool isDashing = false;
     private bool canDash = true;
+    private float dashTimer = 1000f;
 
 
     private void Awake()
@@ -52,8 +53,15 @@ public class PlayerMovement : MonoBehaviour
             FlipSprite();
         }
 
+        if (IsGrounded())
+        {
+            canDash = true;
+        }
+
         animator.SetBool("running", horizontalInput != 0);
         animator.SetBool("grounded", IsGrounded());
+
+        dashTimer += Time.deltaTime;
     }
 
     private void Jump_performed(InputAction.CallbackContext obj)
@@ -96,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Dash_performed(InputAction.CallbackContext obj)
     {
-        if (canDash)
+        if (!isDashing && canDash && dashTimer > dashCooldown)
         {
             StartCoroutine(Dash());
         }
@@ -117,10 +125,7 @@ public class PlayerMovement : MonoBehaviour
         rigidBody2D.velocity = Vector2.zero;
 
         isDashing = false;
-
-        yield return new WaitForSeconds(dashCooldown);
-
-        canDash = true;
+        dashTimer = 0f;
     }
 
     private void FlipSprite()

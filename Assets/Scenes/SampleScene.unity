@@ -523,8 +523,8 @@ MonoBehaviour:
   movementSpeed: 4.5
   jumpPower: 12
   dashingSpeed: 10
-  dashingTime: 0.4
-  dashCooldown: 0.05
+  dashingTime: 0.3
+  dashCooldown: 0.1
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -651,8 +651,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409116023}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: 0}
-  m_LocalScale: {x: 20, y: 1, z: 1}
+  m_LocalPosition: {x: 1.884, y: -3, z: 0}
+  m_LocalScale: {x: 78.37675, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

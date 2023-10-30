@@ -235,6 +235,7 @@ MonoBehaviour:
   verticalSmoothSpeed: 0.4
   cameraOffset: {x: 0, y: 2, z: 0}
   cameraDistance: 0.6
+  cameraControlsOffset: 0
 --- !u!114 &519420034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,7 +248,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dae1acc2096dd742aae695d448af2e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookDistance: 2
+  lookUpDistance: 2
+  lookDownDistance: 5
 --- !u!114 &519420035
 MonoBehaviour:
   m_ObjectHideFlags: 0

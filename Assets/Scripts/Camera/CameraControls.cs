@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class CameraControls : MonoBehaviour
 {
-    [SerializeField] float lookDistance;
+    [SerializeField] float lookUpDistance;
+    [SerializeField] float lookDownDistance;
 
     private CameraFollow cameraFollow;
     private CameraInputActions cameraInputActions;
@@ -27,7 +28,10 @@ public class CameraControls : MonoBehaviour
 
         if (!isLookHeld)
         {
-            cameraFollow.cameraControlsOffset += input * lookDistance;
+            if(input == 1)
+                cameraFollow.cameraControlsOffset += lookUpDistance;
+            else
+                cameraFollow.cameraControlsOffset += -lookDownDistance;
         }
         else
         {

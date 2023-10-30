@@ -42,7 +42,7 @@ public partial class @CameraInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""Up/Down"",
                     ""id"": ""2b9d75d1-816f-433e-b65f-f728433eadbc"",
                     ""path"": ""1DAxis"",
-                    ""interactions"": ""Hold(duration=0.5),Press(behavior=1)"",
+                    ""interactions"": ""Hold(duration=0.7),Press(behavior=1)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""LookUpDown"",

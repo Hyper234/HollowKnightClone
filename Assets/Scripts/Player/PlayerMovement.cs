@@ -114,6 +114,8 @@ public class PlayerMovement : MonoBehaviour
     {
         canDash = false;
         isDashing = true;
+        animator.SetBool("dashing", isDashing);
+        animator.SetTrigger("dash_init");
 
         float gravity = rigidBody2D.gravityScale;
         rigidBody2D.gravityScale = 0;
@@ -125,6 +127,7 @@ public class PlayerMovement : MonoBehaviour
         rigidBody2D.velocity = Vector2.zero;
 
         isDashing = false;
+        animator.SetBool("dashing", isDashing);
         dashTimer = 0f;
     }
 

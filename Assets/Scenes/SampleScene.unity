@@ -413,7 +413,7 @@ SpriteRenderer:
   m_SortingLayerID: 1938959151
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+  m_Sprite: {fileID: 21300056, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -472,6 +472,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: c7b92641-a703-41ac-bc7a-f4773f1129a7
     m_ActionName: Player/Movement[/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ba310d65-d060-4bbf-a3a8-0cce00240833
+    m_ActionName: Player/Dash[/Keyboard/shift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -518,6 +522,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 4.5
   jumpPower: 12
+  dashingSpeed: 10
+  dashingTime: 0.3
+  dashCooldown: 0.1
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -644,8 +651,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409116023}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: 0}
-  m_LocalScale: {x: 20, y: 1, z: 1}
+  m_LocalPosition: {x: 1.884, y: -3, z: 0}
+  m_LocalScale: {x: 78.37675, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

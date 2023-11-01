@@ -6,22 +6,31 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Movement")]
-    [SerializeField] private float movementSpeed;
-    [SerializeField] private float jumpPower;
-
-    [Header("Collisions")]
-    [SerializeField] private LayerMask platformLayerMask;
-
     private Rigidbody2D rigidBody2D;
     private PlayerInput playerInput;
     private PlayerInputActions playerInputActions;
     private BoxCollider2D boxCollider2D;
     private Animator animator;
 
+    [Header("Movement")]
+    [SerializeField] private float movementSpeed;
+    [SerializeField] private float jumpPower;
+
+    [Header("Dash")]
+    [SerializeField] private float dashingSpeed;
+    [SerializeField] private float dashingTime;
+    [SerializeField] private float dashCooldown;
+
+    [Header("Collisions")]
+    [SerializeField] private LayerMask platformLayerMask;
+
     private float horizontalInput;
     private bool jumpHeld = true;
     private bool doubleJumpAvailable = true;
+    private bool isDashing = false;
+    private bool canDash = true;
+    private float dashTimer = 1000f;
+
 
     private void Awake()
     {
@@ -33,15 +42,26 @@ public class PlayerMovement : MonoBehaviour
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
         playerInputActions.Player.Jump.performed += Jump_performed;
+        playerInputActions.Player.Dash.performed += Dash_performed;
     }
 
     private void Update()
     {
-        Move();
-        FlipSprite();
+        if (!isDashing)
+        {
+            Move();
+            FlipSprite();
+        }
+
+        if (IsGrounded())
+        {
+            canDash = true;
+        }
 
         animator.SetBool("running", horizontalInput != 0);
         animator.SetBool("grounded", IsGrounded());
+
+        dashTimer += Time.deltaTime;
     }
 
     private void Jump_performed(InputAction.CallbackContext obj)
@@ -80,6 +100,35 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalInput = playerInputActions.Player.Movement.ReadValue<float>();
         rigidBody2D.velocity = new Vector2(horizontalInput * movementSpeed, rigidBody2D.velocity.y);
+    }
+
+    private void Dash_performed(InputAction.CallbackContext obj)
+    {
+        if (!isDashing && canDash && dashTimer > dashCooldown)
+        {
+            StartCoroutine(Dash());
+        }
+    }
+
+    private IEnumerator Dash()
+    {
+        canDash = false;
+        isDashing = true;
+        animator.SetBool("dashing", isDashing);
+        animator.SetTrigger("dash_init");
+
+        float gravity = rigidBody2D.gravityScale;
+        rigidBody2D.gravityScale = 0;
+        rigidBody2D.velocity = new Vector2(Mathf.Sign(transform.localScale.x) * dashingSpeed, 0);
+
+        yield return new WaitForSeconds(dashingTime);
+
+        rigidBody2D.gravityScale = gravity;
+        rigidBody2D.velocity = Vector2.zero;
+
+        isDashing = false;
+        animator.SetBool("dashing", isDashing);
+        dashTimer = 0f;
     }
 
     private void FlipSprite()

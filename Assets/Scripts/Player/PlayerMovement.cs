@@ -56,6 +56,7 @@ public class PlayerMovement : MonoBehaviour
         if (IsGrounded())
         {
             canDash = true;
+            doubleJumpAvailable = true;
         }
 
         animator.SetBool("running", horizontalInput != 0);
@@ -75,8 +76,6 @@ public class PlayerMovement : MonoBehaviour
                     rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
                     animator.SetTrigger("jump");
                 }
-
-                doubleJumpAvailable = true;
             }
             else
             {

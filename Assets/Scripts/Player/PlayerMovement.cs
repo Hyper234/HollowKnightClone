@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float dashCooldown;
 
     [Header("Collisions")]
-    [SerializeField] private LayerMask platformLayerMask;
+    [SerializeField] private LayerMask groundLayerMask;
 
     private float horizontalInput;
     private bool jumpHeld = true;
@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isDashing = false;
     private bool canDash = true;
     private float dashTimer = 1000f;
+    private bool isWallSliding = false;
 
 
     private void Awake()
@@ -47,22 +48,44 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (!isDashing)
-        {
-            Move();
-            FlipSprite();
-        }
-
+        //ground check
         if (IsGrounded())
         {
             canDash = true;
             doubleJumpAvailable = true;
         }
 
+        //wall check
+        if (IsOnWall())
+        {
+            isWallSliding = true;
+            Debug.Log("On wall");
+        }
+        else
+        {
+            isWallSliding = false;
+            Debug.Log("Not on wall");
+        }
+
+        //movement
+        if (!isDashing)
+        {
+            Move();
+        }
+
+        //animations
         animator.SetBool("running", horizontalInput != 0);
         animator.SetBool("grounded", IsGrounded());
 
+        //update timers
         dashTimer += Time.deltaTime;
+    }
+
+    private void Move()
+    {
+        horizontalInput = playerInputActions.Player.Movement.ReadValue<float>();
+        rigidBody2D.velocity = new Vector2(horizontalInput * movementSpeed, rigidBody2D.velocity.y);
+        FlipSprite();
     }
 
     private void Jump_performed(InputAction.CallbackContext obj)
@@ -96,12 +119,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         jumpHeld = !jumpHeld;
-    }
-
-    private void Move()
-    {
-        horizontalInput = playerInputActions.Player.Movement.ReadValue<float>();
-        rigidBody2D.velocity = new Vector2(horizontalInput * movementSpeed, rigidBody2D.velocity.y);
     }
 
     private void Dash_performed(InputAction.CallbackContext obj)
@@ -142,6 +159,17 @@ public class PlayerMovement : MonoBehaviour
     private bool IsGrounded()
     {
         float margin = .1f;
-        return Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, margin, platformLayerMask).collider != null;
+
+        return Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, margin, groundLayerMask).collider != null;
+    }
+
+    private bool IsOnWall()
+    {
+        float margin = .1f;
+
+        bool left = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.left, margin, groundLayerMask).collider != null;
+        bool right = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.right, margin, groundLayerMask).collider != null;
+
+        return left || right;
     }
 }

@@ -59,12 +59,10 @@ public class PlayerMovement : MonoBehaviour
         if (IsOnWall())
         {
             isWallSliding = true;
-            Debug.Log("On wall");
         }
         else
         {
             isWallSliding = false;
-            Debug.Log("Not on wall");
         }
 
         //movement

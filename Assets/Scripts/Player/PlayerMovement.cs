@@ -165,7 +165,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool IsOnWall()
     {
-        float margin = .1f;
+        float margin = .02f;
 
         bool left = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.left, margin, groundLayerMask).collider != null;
         bool right = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.right, margin, groundLayerMask).collider != null;

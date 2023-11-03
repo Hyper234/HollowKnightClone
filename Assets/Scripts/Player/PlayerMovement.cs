@@ -66,30 +66,33 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump_performed(InputAction.CallbackContext obj)
     {
-        if (IsGrounded())
+        if (!isDashing)
         {
-            if (jumpHeld)
+            if (IsGrounded())
             {
-                rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
-                animator.SetTrigger("jump");
-            }
-
-            doubleJumpAvailable = true;
-        }
-        else
-        {
-            if (jumpHeld)
-            {
-                if (doubleJumpAvailable)
+                if (jumpHeld)
                 {
                     rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
                     animator.SetTrigger("jump");
-                    doubleJumpAvailable = false;
                 }
+
+                doubleJumpAvailable = true;
             }
             else
             {
-                rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, Mathf.Min(0, rigidBody2D.velocity.y));
+                if (jumpHeld)
+                {
+                    if (doubleJumpAvailable)
+                    {
+                        rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
+                        animator.SetTrigger("jump");
+                        doubleJumpAvailable = false;
+                    }
+                }
+                else
+                {
+                    rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, Mathf.Min(0, rigidBody2D.velocity.y));
+                }
             }
         }
 

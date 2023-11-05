@@ -10,6 +10,11 @@ public class CameraFollow : MonoBehaviour
 
     public float cameraControlsOffset = 0;
 
+    private void Awake()
+    {
+        cameraControlsOffset = 0;
+    }
+
     private void FixedUpdate()
     {
         Vector3 desiredPosition = target.position + cameraOffset + new Vector3(cameraDistance * target.localScale.x, cameraControlsOffset, 0);

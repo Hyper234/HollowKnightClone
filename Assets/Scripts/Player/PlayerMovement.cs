@@ -182,7 +182,7 @@ public class PlayerMovement : MonoBehaviour
         //set dashing movement
         float gravity = rigidBody2D.gravityScale;
         rigidBody2D.gravityScale = 0;
-        if (!isOnWall)
+        if (!isSliding)
         {
             rigidBody2D.velocity = new Vector2(Mathf.Sign(transform.localScale.x) * dashingSpeed, 0);
         }

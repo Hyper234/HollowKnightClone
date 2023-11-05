@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float movementSpeed;
     [SerializeField] private float jumpPower;
+    [SerializeField] private float wallSlidingSpeed;
 
     [Header("Dash")]
     [SerializeField] private float dashingSpeed;
@@ -82,7 +83,19 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
         horizontalInput = playerInputActions.Player.Movement.ReadValue<float>();
-        rigidBody2D.velocity = new Vector2(horizontalInput * movementSpeed, rigidBody2D.velocity.y);
+
+        if (isWallSliding)
+        {
+            if(rigidBody2D.velocity.y > 0)
+                rigidBody2D.velocity = new Vector2(horizontalInput * movementSpeed, rigidBody2D.velocity.y);
+            else
+                rigidBody2D.velocity = new Vector2(horizontalInput * movementSpeed, -wallSlidingSpeed);
+        }
+        else
+        {
+            rigidBody2D.velocity = new Vector2(horizontalInput * movementSpeed, rigidBody2D.velocity.y);
+        }
+
         FlipSprite();
     }
 
@@ -156,7 +169,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool IsGrounded()
     {
-        float margin = .1f;
+        float margin = .02f;
 
         return Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, margin, groundLayerMask).collider != null;
     }

@@ -591,6 +591,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 4.5
   jumpPower: 12
+  wallSlidingSpeed: 3
   dashingSpeed: 10
   dashingTime: 0.3
   dashCooldown: 0.15
@@ -619,7 +620,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8546956481606849820, guid: 638f3942d435cb849ba49f758d4d05ba, type: 3}
       propertyPath: m_LocalScale.y
-      value: 8.462151
+      value: 19.464638
       objectReference: {fileID: 0}
     - target: {fileID: 8546956481606849820, guid: 638f3942d435cb849ba49f758d4d05ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -627,7 +628,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8546956481606849820, guid: 638f3942d435cb849ba49f758d4d05ba, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.03
+      value: 4.7807
       objectReference: {fileID: 0}
     - target: {fileID: 8546956481606849820, guid: 638f3942d435cb849ba49f758d4d05ba, type: 3}
       propertyPath: m_LocalPosition.z

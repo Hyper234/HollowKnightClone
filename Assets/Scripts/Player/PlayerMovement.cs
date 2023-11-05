@@ -47,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
         playerInputActions.Player.Jump.performed += Jump_performed;
+        playerInputActions.Player.Jump.canceled += Jump_canceled;
         playerInputActions.Player.Dash.performed += Dash_performed;
     }
 
@@ -132,34 +133,32 @@ public class PlayerMovement : MonoBehaviour
         {
             if (isGrounded)
             {
-                if (jumpHeld)
-                {
-                    //default jump
-                    rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
-                    animator.SetTrigger("jump");
-                }
+                //default jump
+                rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
+                animator.SetTrigger("jump");
             }
             else
             {
-                if (jumpHeld)
+                if (doubleJumpAvailable)
                 {
-                    if (doubleJumpAvailable)
-                    {
-                        //double jump if player not grounded
-                        rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
-                        animator.SetTrigger("jump");
-                        doubleJumpAvailable = false;
-                    }
-                }
-                else
-                {
-                    //resets player's vertical movement speed when jump released
-                    rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, Mathf.Min(0, rigidBody2D.velocity.y));
+                    //double jump if player not grounded
+                    rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
+                    animator.SetTrigger("jump");
+                    doubleJumpAvailable = false;
                 }
             }
         }
 
         jumpHeld = !jumpHeld;
+    }
+
+    private void Jump_canceled(InputAction.CallbackContext obj)
+    {
+        if(!isDashing && !isGrounded)
+        {
+            //resets player's vertical movement speed when jump released
+            rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, Mathf.Min(0, rigidBody2D.velocity.y));
+        }
     }
 
     private void Dash_performed(InputAction.CallbackContext obj)

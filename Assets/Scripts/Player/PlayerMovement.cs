@@ -189,7 +189,7 @@ public class PlayerMovement : MonoBehaviour
         //flip the sprite depending on the horizontal velocity
         if (rigidBody2D.velocity.x < 0)
             transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
-        else
+        if (rigidBody2D.velocity.x > 0)
             transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
     }
 

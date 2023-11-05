@@ -34,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isDashing = false;
     private bool canDash = true;
     private float dashTimer = 1000f;
+    private bool isSliding = false;
 
 
     private void Awake()
@@ -54,9 +55,9 @@ public class PlayerMovement : MonoBehaviour
         //ground check
         if (IsGrounded())
         {
+            isGrounded = true;
             canDash = true;
             doubleJumpAvailable = true;
-            isGrounded = true;
         }
         else
         {
@@ -67,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
         if (IsOnWall())
         {
             isOnWall = true;
+            canDash = true;
             doubleJumpAvailable = true;
         }
         else
@@ -95,20 +97,29 @@ public class PlayerMovement : MonoBehaviour
 
         if (isOnWall)
         {
-            if(rigidBody2D.velocity.y > 0)
+            if(rigidBody2D.velocity.y >= 0)
+            {
                 //if the player is jumping against the wall don't wall slide
                 rigidBody2D.velocity = new Vector2(horizontalInput * movementSpeed, rigidBody2D.velocity.y);
+                isSliding = false;
+            }
             else
+            {
                 //if the player is falling against the wall then wall slide
                 rigidBody2D.velocity = new Vector2(horizontalInput * movementSpeed, -wallSlidingSpeed);
+                isSliding = true;
+                Debug.Log("hello I'm sliding");
+            }
         }
         else
         {
             //default movement
             rigidBody2D.velocity = new Vector2(horizontalInput * movementSpeed, rigidBody2D.velocity.y);
+            isSliding = false;
         }
 
         FlipSprite();
+        animator.SetBool("sliding", isSliding);
     }
 
     private void Jump_performed(InputAction.CallbackContext obj)
@@ -196,7 +207,7 @@ public class PlayerMovement : MonoBehaviour
     //checking if the player is touching the ground
     private bool IsGrounded()
     {
-        float margin = .02f;
+        float margin = .1f;
 
         return Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, margin, groundLayerMask).collider != null;
     }
@@ -204,10 +215,14 @@ public class PlayerMovement : MonoBehaviour
     //checking if the player is touching a wall
     private bool IsOnWall()
     {
-        float margin = .02f;
+        float distance = .02f;
+        float bottomMargin = .3f;
 
-        bool left = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.left, margin, groundLayerMask).collider != null;
-        bool right = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.right, margin, groundLayerMask).collider != null;
+        Vector2 center = new Vector2(boxCollider2D.bounds.center.x, boxCollider2D.bounds.center.y + bottomMargin / 2);
+        Vector2 adjustedSize = new Vector2(boxCollider2D.bounds.size.x, boxCollider2D.bounds.size.y - bottomMargin);
+
+        bool left = Physics2D.BoxCast(center, adjustedSize, 0f, Vector2.left, distance, groundLayerMask).collider != null;
+        bool right = Physics2D.BoxCast(center, adjustedSize, 0f, Vector2.right, distance, groundLayerMask).collider != null;
 
         return left || right;
     }

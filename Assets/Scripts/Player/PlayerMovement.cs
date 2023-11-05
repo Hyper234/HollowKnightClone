@@ -67,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
         if (IsOnWall())
         {
             isOnWall = true;
+            doubleJumpAvailable = true;
         }
         else
         {

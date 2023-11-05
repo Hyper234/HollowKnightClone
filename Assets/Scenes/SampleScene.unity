@@ -566,7 +566,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 2.3
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 9c497a4ce1f356b448c0dd3eca091d35, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -593,7 +593,7 @@ MonoBehaviour:
   jumpPower: 12
   dashingSpeed: 10
   dashingTime: 0.3
-  dashCooldown: 0.1
+  dashCooldown: 0.15
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -684,7 +684,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8546956481606849820, guid: 638f3942d435cb849ba49f758d4d05ba, type: 3}
       propertyPath: m_LocalScale.x
-      value: 4.359411
+      value: 7.7575717
       objectReference: {fileID: 0}
     - target: {fileID: 8546956481606849820, guid: 638f3942d435cb849ba49f758d4d05ba, type: 3}
       propertyPath: m_LocalScale.y
@@ -692,7 +692,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8546956481606849820, guid: 638f3942d435cb849ba49f758d4d05ba, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1
+      value: -1.8495
       objectReference: {fileID: 0}
     - target: {fileID: 8546956481606849820, guid: 638f3942d435cb849ba49f758d4d05ba, type: 3}
       propertyPath: m_LocalPosition.y

@@ -81,10 +81,17 @@ public class PlayerMovement : MonoBehaviour
         {
             Move();
         }
+    }
+
+    private void LateUpdate()
+    {
+        FlipSprite();
 
         //animations
         animator.SetBool("running", horizontalInput != 0);
         animator.SetBool("grounded", isGrounded);
+        animator.SetBool("sliding", isSliding);
+        animator.SetBool("dashing", isDashing);
 
         //update timers
         dashTimer += Time.deltaTime;
@@ -108,7 +115,6 @@ public class PlayerMovement : MonoBehaviour
                 //if the player is falling against the wall then wall slide
                 rigidBody2D.velocity = new Vector2(horizontalInput * movementSpeed, -wallSlidingSpeed);
                 isSliding = true;
-                Debug.Log("hello I'm sliding");
             }
         }
         else
@@ -117,9 +123,6 @@ public class PlayerMovement : MonoBehaviour
             rigidBody2D.velocity = new Vector2(horizontalInput * movementSpeed, rigidBody2D.velocity.y);
             isSliding = false;
         }
-
-        FlipSprite();
-        animator.SetBool("sliding", isSliding);
     }
 
     private void Jump_performed(InputAction.CallbackContext obj)
@@ -174,13 +177,20 @@ public class PlayerMovement : MonoBehaviour
         //set all states and dashing animation
         canDash = false;
         isDashing = true;
-        animator.SetBool("dashing", isDashing);
         animator.SetTrigger("dash_init");
 
         //set dashing movement
         float gravity = rigidBody2D.gravityScale;
         rigidBody2D.gravityScale = 0;
-        rigidBody2D.velocity = new Vector2(Mathf.Sign(transform.localScale.x) * dashingSpeed, 0);
+        if (!isOnWall)
+        {
+            rigidBody2D.velocity = new Vector2(Mathf.Sign(transform.localScale.x) * dashingSpeed, 0);
+        }
+        else
+        {
+            rigidBody2D.velocity = new Vector2(Mathf.Sign(-transform.localScale.x) * dashingSpeed, 0);
+            isSliding = false;
+        }
 
         //wait for dash to end
         yield return new WaitForSeconds(dashingTime);
@@ -191,7 +201,6 @@ public class PlayerMovement : MonoBehaviour
 
         //stop dashing animation and start dash cooldown timer
         isDashing = false;
-        animator.SetBool("dashing", isDashing);
         dashTimer = 0f;
     }
 
@@ -215,11 +224,12 @@ public class PlayerMovement : MonoBehaviour
     //checking if the player is touching a wall
     private bool IsOnWall()
     {
+        //checking if the player is on the wall with margin to prevent returning true when hitting the ground or the ceiling
         float distance = .02f;
-        float bottomMargin = .3f;
+        float margin = .3f;
 
-        Vector2 center = new Vector2(boxCollider2D.bounds.center.x, boxCollider2D.bounds.center.y + bottomMargin / 2);
-        Vector2 adjustedSize = new Vector2(boxCollider2D.bounds.size.x, boxCollider2D.bounds.size.y - bottomMargin);
+        Vector2 center = boxCollider2D.bounds.center;
+        Vector2 adjustedSize = new Vector2(boxCollider2D.bounds.size.x, boxCollider2D.bounds.size.y - 2 * margin);
 
         bool left = Physics2D.BoxCast(center, adjustedSize, 0f, Vector2.left, distance, groundLayerMask).collider != null;
         bool right = Physics2D.BoxCast(center, adjustedSize, 0f, Vector2.right, distance, groundLayerMask).collider != null;

@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float movementSpeed;
     [SerializeField] private float jumpPower;
     [SerializeField] private float wallSlidingSpeed;
+    [SerializeField] private float wallJumpPower;
+    [SerializeField] private float wallJumpDuration;
 
     [Header("Dash")]
     [SerializeField] private float dashingSpeed;
@@ -29,13 +31,12 @@ public class PlayerMovement : MonoBehaviour
     private bool isOnWall = false;
     private bool isGrounded = false;
     private float horizontalInput;
-    private bool jumpHeld = true;
     private bool doubleJumpAvailable = true;
     private bool isDashing = false;
     private bool canDash = true;
     private float dashTimer = 1000f;
     private bool isSliding = false;
-
+    private bool isWallJumping = false;
 
     private void Awake()
     {
@@ -69,8 +70,6 @@ public class PlayerMovement : MonoBehaviour
         if (IsOnWall())
         {
             isOnWall = true;
-            canDash = true;
-            doubleJumpAvailable = true;
         }
         else
         {
@@ -78,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //movement
-        if (!isDashing)
+        if (!isDashing && !isWallJumping)
         {
             Move();
         }
@@ -116,6 +115,8 @@ public class PlayerMovement : MonoBehaviour
                 //if the player is falling against the wall then wall slide
                 rigidBody2D.velocity = new Vector2(horizontalInput * movementSpeed, -wallSlidingSpeed);
                 isSliding = true;
+                canDash = true;
+                doubleJumpAvailable = true;
             }
         }
         else
@@ -129,13 +130,18 @@ public class PlayerMovement : MonoBehaviour
     private void Jump_performed(InputAction.CallbackContext obj)
     {
         //the player cannot jump while dashing
-        if (!isDashing)
+        if (!isDashing && !isWallJumping)
         {
             if (isGrounded)
             {
                 //default jump
                 rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpPower);
                 animator.SetTrigger("jump");
+            }
+            else if (isSliding)
+            {
+                //wall jump
+                StartCoroutine(WallJump());
             }
             else
             {
@@ -148,8 +154,6 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
-
-        jumpHeld = !jumpHeld;
     }
 
     private void Jump_canceled(InputAction.CallbackContext obj)
@@ -159,6 +163,23 @@ public class PlayerMovement : MonoBehaviour
             //resets player's vertical movement speed when jump released
             rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, Mathf.Min(0, rigidBody2D.velocity.y));
         }
+    }
+
+    private IEnumerator WallJump()
+    {
+        //setup before wall jump
+        isWallJumping = true;
+        animator.SetTrigger("jump");
+
+        //set wall jump velocity
+        rigidBody2D.velocity = new Vector2(Mathf.Sign(-transform.localScale.x) * wallJumpPower, jumpPower);
+        isSliding = false;
+
+        //wait for the duration of the wall jump
+        yield return new WaitForSeconds(wallJumpDuration);
+
+        rigidBody2D.velocity = new Vector2(0, rigidBody2D.velocity.y);
+        isWallJumping = false;
     }
 
     private void Dash_performed(InputAction.CallbackContext obj)

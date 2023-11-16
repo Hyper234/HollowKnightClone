@@ -8,6 +8,7 @@ public class HealthSystem : MonoBehaviour
     [Header("References")]
     [SerializeField] private Image fillImage;
 
+    [Header("Health")]
     [SerializeField] private float maxHealth = 10;
     private float currentHealth;
     void Start()
@@ -23,11 +24,11 @@ public class HealthSystem : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        currentHealth -= Mathf.Min(0, damage);
+        currentHealth -= damage;
     }
 
     public void Heal(float health)
     {
-        currentHealth += Mathf.Max(maxHealth, health);
+        currentHealth = Mathf.Min(maxHealth, currentHealth + health);
     }
 }

@@ -256,4 +256,10 @@ public class PlayerMovement : MonoBehaviour
 
         return left || right;
     }
+
+    //disable movement on death
+    public void DisableMovement()
+    {
+        playerInputActions.Disable();
+    }
 }

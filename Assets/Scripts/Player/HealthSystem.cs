@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class HealthSystem : MonoBehaviour
@@ -35,7 +36,7 @@ public class HealthSystem : MonoBehaviour
         //death when hp is 0 or lower
         if(currentHealth <= 0)
         {
-            GetComponent<PlayerMovement>().enabled = false;
+            GetComponent<PlayerMovement>().DisableMovement();
             animator.SetTrigger("death");
         }
     }

@@ -10,9 +10,15 @@ public class HealthSystem : MonoBehaviour
 
     [Header("Health")]
     [SerializeField] private float maxHealth = 10;
+
+    private Animator animator;
+
     private float currentHealth;
+
     void Start()
     {
+        animator = GetComponent<Animator>();
+
         currentHealth = maxHealth;
     }
 
@@ -25,6 +31,13 @@ public class HealthSystem : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+
+        //death when hp is 0 or lower
+        if(currentHealth <= 0)
+        {
+            GetComponent<PlayerMovement>().enabled = false;
+            animator.SetTrigger("death");
+        }
     }
 
     public void Heal(float health)
